@@ -1,5 +1,7 @@
 package com.lucasmoraist.devflixapi.videos.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.lucasmoraist.devflixapi.category.domain.Category;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,5 +24,9 @@ public class Videos {
     private String description;
     @Column(nullable = false)
     private String url;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Category category;
 
 }
