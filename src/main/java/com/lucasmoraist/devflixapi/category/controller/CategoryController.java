@@ -3,6 +3,8 @@ package com.lucasmoraist.devflixapi.category.controller;
 import com.lucasmoraist.devflixapi.category.domain.Category;
 import com.lucasmoraist.devflixapi.category.dto.CreateOrUpdateCategoriesDTO;
 import com.lucasmoraist.devflixapi.category.service.CategoryService;
+import com.lucasmoraist.devflixapi.videos.domain.Videos;
+import com.lucasmoraist.devflixapi.videos.service.VideosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,14 @@ public class CategoryController {
 
     @Autowired
     private CategoryService service;
+
+    @Autowired
+    private VideosService videosService;
+
+    @GetMapping("{idCategory}/videos")
+    public ResponseEntity<List<Videos>> findVideosByCategory(@PathVariable Long idCategory){
+        return ResponseEntity.ok(this.videosService.listByIdCategory(idCategory));
+    }
 
     @GetMapping
     public ResponseEntity<List<Category>> listAll(){

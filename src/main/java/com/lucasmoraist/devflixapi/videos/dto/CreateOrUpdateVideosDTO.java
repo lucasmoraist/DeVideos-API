@@ -1,4 +1,6 @@
 package com.lucasmoraist.devflixapi.videos.dto;
 
-public record CreateOrUpdateVideosDTO(String title, String description, String url) {
+import com.lucasmoraist.devflixapi.category.domain.Category;
+
+public record CreateOrUpdateVideosDTO(String title, String description, String url, Long idCategory) {
 }
