@@ -36,6 +36,11 @@ public class VideosService {
                 .orElseThrow(() -> new RuntimeException("Videos Not Found"));
     }
 
+    public List<Videos> listVideosByTitle(String search){
+        return this.videosRepository.findVideosByTitle(search)
+                .orElseThrow(() -> new RuntimeException("Video Not Found"));
+    }
+
     public Videos createVideo(CreateOrUpdateVideosDTO dto){
         var category = this.categoryRepository.findById(dto.idCategory())
                 .orElseThrow(() -> new RuntimeException("Category Not Found"));

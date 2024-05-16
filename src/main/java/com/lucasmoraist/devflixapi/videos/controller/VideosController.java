@@ -16,7 +16,7 @@ public class VideosController {
     @Autowired
     private VideosService service;
 
-    @GetMapping
+    @GetMapping("list-videos")
     public ResponseEntity<List<Videos>> listAll(){
         return ResponseEntity.ok(this.service.listAll());
     }
@@ -24,6 +24,11 @@ public class VideosController {
     @GetMapping("{id}")
     public ResponseEntity<Videos> listById(@PathVariable Long id){
         return ResponseEntity.ok(this.service.listById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Videos>> listVideosByTitle(@RequestParam(name = "search") String search){
+        return ResponseEntity.ok(this.service.listVideosByTitle(search));
     }
 
     @PostMapping
