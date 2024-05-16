@@ -89,14 +89,10 @@ public class VideosService {
     }
 
     public String deleteVideos(Long id){
-        if(id == 1L){
-            return "Não é possível excluir essa categoria";
-        }else{
-            Videos video = this.videosRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Video Not Found"));
-            this.videosRepository.delete(video);
-            return "Excluído com sucesso!";
-        }
+        Videos video = this.videosRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Video Not Found"));
+        this.videosRepository.delete(video);
+        return "Excluído com sucesso!";
     }
 
 }
