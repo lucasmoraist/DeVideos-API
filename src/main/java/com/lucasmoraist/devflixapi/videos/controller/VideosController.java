@@ -16,7 +16,7 @@ public class VideosController {
     @Autowired
     private VideosService service;
 
-    @GetMapping("list-videos")
+    @GetMapping("list")
     public ResponseEntity<List<Videos>> listAll(){
         return ResponseEntity.ok(this.service.listAll());
     }
@@ -31,17 +31,17 @@ public class VideosController {
         return ResponseEntity.ok(this.service.listVideosByTitle(search));
     }
 
-    @PostMapping
+    @PostMapping("create")
     public ResponseEntity<Videos> create(@RequestBody CreateOrUpdateVideosDTO dto){
         return ResponseEntity.ok(this.service.createVideo(dto));
     }
 
-    @PutMapping("{id}")
+    @PutMapping("update/{id}")
     public ResponseEntity<Videos> update(@PathVariable Long id, @RequestBody CreateOrUpdateVideosDTO dto) throws Exception{
         return ResponseEntity.ok(this.service.updateVideo(id, dto));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         return ResponseEntity.ok(this.service.deleteVideos(id));
     }
