@@ -49,10 +49,14 @@ public class CategoryService {
     }
 
     public String deleteCategory(Long id){
-        Category category = this.categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category Not Found"));
-        this.categoryRepository.delete(category);
-        return "Excluído com sucesso!";
+        if(id == 1L){
+            return "Não é possível excluir essa categoria!";
+        }else{
+            Category category = this.categoryRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Category Not Found"));
+            this.categoryRepository.delete(category);
+            return "Excluído com sucesso!";
+        }
     }
 
 }
