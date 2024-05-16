@@ -42,17 +42,34 @@ public class VideosService {
     }
 
     public Videos createVideo(CreateOrUpdateVideosDTO dto){
-        var category = this.categoryRepository.findById(dto.idCategory())
-                .orElseThrow(() -> new RuntimeException("Category Not Found"));
 
-        Videos newVideos = Videos.builder()
-                .title(dto.title())
-                .description(dto.description())
-                .url(dto.url())
-                .category(category)
-                .build();
-        this.videosRepository.save(newVideos);
-        return newVideos;
+        if(dto.idCategory() == null){
+            var category = this.categoryRepository.findById(1L)
+                    .orElseThrow(() -> new RuntimeException("Category Not Found"));
+
+            Videos newVideos = Videos.builder()
+                    .title(dto.title())
+                    .description(dto.description())
+                    .url(dto.url())
+                    .category(category)
+                    .build();
+
+            this.videosRepository.save(newVideos);
+            return newVideos;
+        }else{
+            var category = this.categoryRepository.findById(dto.idCategory())
+                    .orElseThrow(() -> new RuntimeException("Category Not Found"));
+
+            Videos newVideos = Videos.builder()
+                    .title(dto.title())
+                    .description(dto.description())
+                    .url(dto.url())
+                    .category(category)
+                    .build();
+
+            this.videosRepository.save(newVideos);
+            return newVideos;
+        }
     }
     
     public Videos updateVideo(Long id, CreateOrUpdateVideosDTO dto) throws Exception{
@@ -72,10 +89,14 @@ public class VideosService {
     }
 
     public String deleteVideos(Long id){
-        Videos video = this.videosRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Video Not Found"));
-        this.videosRepository.delete(video);
-        return "Excluído com sucesso!";
+        if(id == 1L){
+            return "Não é possível excluir essa categoria";
+        }else{
+            Videos video = this.videosRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Video Not Found"));
+            this.videosRepository.delete(video);
+            return "Excluído com sucesso!";
+        }
     }
 
 }

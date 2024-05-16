@@ -36,17 +36,17 @@ public class CategoryController {
         return ResponseEntity.ok(this.service.listById(id));
     }
 
-    @PostMapping
+    @PostMapping("create")
     public ResponseEntity<Category> create(@RequestBody CreateOrUpdateCategoriesDTO dto){
         return ResponseEntity.ok(this.service.createCategory(dto));
     }
 
-    @PutMapping("{id}")
+    @PutMapping("update/{id}")
     public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody CreateOrUpdateCategoriesDTO dto) throws Exception{
         return ResponseEntity.ok(this.service.updateCategory(id, dto));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         return ResponseEntity.ok(this.service.deleteCategory(id));
     }
