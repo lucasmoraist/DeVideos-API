@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.lucasmoraist</groupId>
-	<artifactId>devflix-api</artifactId>
+	<artifactId>devideos-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>devflix-api</name>
-	<description>Demo project for Spring Boot</description>
+	<name>devideos-api</name>
+	<description>A DeVideos é uma API que permite o usuário salvar seus vídeos favoritos em diferentes categorias.</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
