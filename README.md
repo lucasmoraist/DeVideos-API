@@ -12,7 +12,7 @@ A plataforma deve permitir ao usuário montar playlists com links para seus víd
 - Java 17 ou superior
 - Maven 3.2.5 ou superior
 ### Etapas
-1. Configure seu bando de dados no arquivo `application.properties`
+1. Configure seu banco de dados no arquivo `application.properties`
 2. Abra o bash do seu computador e rode os seguintes comandos:
 ```bash
 mvn clean
