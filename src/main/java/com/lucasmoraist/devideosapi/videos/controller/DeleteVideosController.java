@@ -24,7 +24,7 @@ public class DeleteVideosController {
 
     @Operation(
             summary = "Delete Video",
-            correcting words            description = "This method will receive the Video ID and delete the video"
+            description = "This method will receive the Video ID and delete the video"
     )
     @Parameter(
             name = "id",
