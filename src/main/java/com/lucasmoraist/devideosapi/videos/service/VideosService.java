@@ -1,6 +1,8 @@
 package com.lucasmoraist.devideosapi.videos.service;
 
-import com.lucasmoraist.devideosapi.category.repository.CategoryRepository;
+import com.lucasmoraist.devideosapi.category.domain.Category;
+import com.lucasmoraist.devideosapi.category.service.CategoryService;
+import com.lucasmoraist.devideosapi.exception.ResourceNotFound;
 import com.lucasmoraist.devideosapi.videos.domain.Videos;
 import com.lucasmoraist.devideosapi.videos.dto.CreateOrUpdateVideosDTO;
 import com.lucasmoraist.devideosapi.videos.repository.VideosRepository;
@@ -8,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VideosService {
@@ -17,82 +18,68 @@ public class VideosService {
     private VideosRepository videosRepository;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
-    public List<Videos> listAll(){
+    public List<Videos> listAll() {
         return this.videosRepository.findAll();
     }
 
-    public Videos listById(Long id){
-        return this.videosRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Video Not Found"));
+    public Videos listById(Long id) {
+        return this.findVideoById(id);
     }
 
-    public List<Videos> listByIdCategory(Long idCategory){
-        var id = this.categoryRepository.findById(idCategory)
-                .orElseThrow(() -> new RuntimeException("Category Not Found!"));
+    public List<Videos> listVideosByIdCategory(Long idCategory) {
+        Category id = this.categoryService.listCategoryById(idCategory);
 
         return this.videosRepository.findVideoByCategory(id.getId())
-                .orElseThrow(() -> new RuntimeException("Videos Not Found"));
+                .orElseThrow(() -> new ResourceNotFound("Videos Not Found"));
     }
 
-    public List<Videos> listVideosByTitle(String search){
+    public List<Videos> listVideosByTitle(String search) {
         return this.videosRepository.findVideosByTitle(search)
-                .orElseThrow(() -> new RuntimeException("Video Not Found"));
+                .orElseThrow(() -> new ResourceNotFound("Video Not Found"));
     }
 
-    public Videos createVideo(CreateOrUpdateVideosDTO dto){
+    public Videos createVideo(CreateOrUpdateVideosDTO dto) {
+        Category category;
+        Videos newVideos = Videos.builder()
+                .title(dto.title())
+                .description(dto.description())
+                .url(dto.url())
+                .build();
 
-        if(dto.idCategory() == null){
-            var category = this.categoryRepository.findById(1L)
-                    .orElseThrow(() -> new RuntimeException("Category Not Found"));
-
-            Videos newVideos = Videos.builder()
-                    .title(dto.title())
-                    .description(dto.description())
-                    .url(dto.url())
-                    .category(category)
-                    .build();
-
-            this.videosRepository.save(newVideos);
-            return newVideos;
-        }else{
-            var category = this.categoryRepository.findById(dto.idCategory())
-                    .orElseThrow(() -> new RuntimeException("Category Not Found"));
-
-            Videos newVideos = Videos.builder()
-                    .title(dto.title())
-                    .description(dto.description())
-                    .url(dto.url())
-                    .category(category)
-                    .build();
-
-            this.videosRepository.save(newVideos);
-            return newVideos;
+        if (dto.idCategory() == null) {
+            category = this.categoryService.listCategoryById(1L);
+        } else {
+            category = this.categoryService.listCategoryById(dto.idCategory());
         }
+        newVideos.setCategory(category);
+
+        this.videosRepository.save(newVideos);
+
+        return newVideos;
     }
-    
-    public Videos updateVideo(Long id, CreateOrUpdateVideosDTO dto) throws Exception{
-        Optional<Videos> optionalVideos = this.videosRepository.findById(id);
-        
-        if(optionalVideos.isEmpty()){
-            throw new Exception("Video Not Found");
-        }
 
-        var video = optionalVideos.get();
+    public Videos updateVideo(Long id, CreateOrUpdateVideosDTO dto) {
+        Videos video = this.findVideoById(id);
+
         video.setTitle(dto.title());
         video.setDescription(dto.description());
         video.setUrl(dto.url());
-        
+
         this.videosRepository.save(video);
         return video;
     }
 
-    public String deleteVideos(Long id){
-        Videos video = this.videosRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Video Not Found"));
+    public String deleteVideos(Long id) {
+        Videos video = this.findVideoById(id);
         this.videosRepository.delete(video);
         return "Excluído com sucesso!";
+    }
+
+    private Videos findVideoById(Long id) {
+        return this.videosRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Video Not Found"));
     }
 
 }
