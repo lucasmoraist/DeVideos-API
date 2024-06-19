@@ -1,7 +1,6 @@
 package com.lucasmoraist.devideosapi.infra.exception;
 
-import com.lucasmoraist.devideosapi.exception.ExceptionDTO;
-import com.lucasmoraist.devideosapi.exception.ResourceNotFound;
+import com.lucasmoraist.devideosapi.exception.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -37,9 +36,21 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(dto);
     }
 
-    @ExceptionHandler(DataAccessException.class)
-    protected ResponseEntity<ExceptionDTO> failedConnectDatabase(DataAccessException e){
-        ExceptionDTO dto = new ExceptionDTO("Failed to connect to database", HttpStatus.BAD_GATEWAY);
+    @ExceptionHandler(DuplicateException.class)
+    private ResponseEntity<ExceptionDTO> threatDuplicateEntry(DuplicateException e){
+        ExceptionDTO dto = new ExceptionDTO(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(dto);
+    }
+
+    @ExceptionHandler(PasswordException.class)
+    private ResponseEntity<ExceptionDTO> incorretCredentials(PasswordException e){
+        ExceptionDTO dto = new ExceptionDTO(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(dto);
+    }
+
+    @ExceptionHandler(EmailNotFound.class)
+    private ResponseEntity<ExceptionDTO> userNotFound(EmailNotFound e){
+        ExceptionDTO dto = new ExceptionDTO(e.getMessage(), HttpStatus.NOT_FOUND);
         return ResponseEntity.badRequest().body(dto);
     }
 }
