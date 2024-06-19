@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/videos")
 @Slf4j
-@Tag(name = "Upadte Video")
+@Tag(name = "Update Video")
 public class UpdateVideosController {
 
     @Autowired
