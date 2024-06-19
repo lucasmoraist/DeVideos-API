@@ -5,6 +5,7 @@ import com.lucasmoraist.devideosapi.category.dto.CreateOrUpdateCategoriesDTO;
 import com.lucasmoraist.devideosapi.category.service.CategoryService;
 import com.lucasmoraist.devideosapi.videos.domain.Videos;
 import com.lucasmoraist.devideosapi.videos.service.VideosService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/api/category")
+@Slf4j
 public class CategoryController {
 
     @Autowired
@@ -21,34 +23,42 @@ public class CategoryController {
     @Autowired
     private VideosService videosService;
 
-    @GetMapping("{idCategory}/videos")
-    public ResponseEntity<List<Videos>> findVideosByCategory(@PathVariable Long idCategory){
-        return ResponseEntity.ok(this.videosService.listByIdCategory(idCategory));
+    @GetMapping("/{idCategory}/videos")
+    public ResponseEntity<List<Videos>> findVideosByCategory(@PathVariable Long idCategory) {
+        List<Videos> videos = this.videosService.listVideosByIdCategory(idCategory);
+        log.info("Listing videos by category: {}", videos);
+        return ResponseEntity.ok().body(videos);
     }
 
     @GetMapping
-    public ResponseEntity<List<Category>> listAll(){
-        return ResponseEntity.ok(this.service.listAll());
+    public ResponseEntity<List<Category>> listAll() {
+        log.info("Listing all categories");
+        return ResponseEntity.ok().body(this.service.listAll());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Category> listById(@PathVariable Long id){
-        return ResponseEntity.ok(this.service.listById(id));
+    public ResponseEntity<Category> listById(@PathVariable Long id) {
+        log.info("Listing category with id: {}", id);
+        return ResponseEntity.ok().body(this.service.listCategoryById(id));
     }
 
-    @PostMapping("create")
-    public ResponseEntity<Category> create(@RequestBody CreateOrUpdateCategoriesDTO dto){
-        return ResponseEntity.ok(this.service.createCategory(dto));
+    @PostMapping
+    public ResponseEntity<Category> create(@RequestBody CreateOrUpdateCategoriesDTO dto) {
+        Category category = this.service.createCategory(dto);
+        log.info("Creating category: {}", category);
+        return ResponseEntity.ok().body(category);
     }
 
-    @PutMapping("update/{id}")
-    public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody CreateOrUpdateCategoriesDTO dto) throws Exception{
-        return ResponseEntity.ok(this.service.updateCategory(id, dto));
+    @PutMapping("{id}")
+    public ResponseEntity<Category> update(@PathVariable Long id, @RequestBody CreateOrUpdateCategoriesDTO dto) {
+        log.info("Updating category with ID: {}", id);
+        return ResponseEntity.ok().body(this.service.updateCategory(id, dto));
     }
 
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id){
-        return ResponseEntity.ok(this.service.deleteCategory(id));
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        log.info("Deleting category with ID: {}", id);
+        return ResponseEntity.ok().body(this.service.deleteCategory(id));
     }
 
 }
