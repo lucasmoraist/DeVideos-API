@@ -5,6 +5,7 @@ import com.lucasmoraist.devideosapi.category.service.CategoryService;
 import com.lucasmoraist.devideosapi.exception.ResourceNotFound;
 import com.lucasmoraist.devideosapi.videos.domain.Videos;
 import com.lucasmoraist.devideosapi.videos.dto.CreateOrUpdateVideosDTO;
+import com.lucasmoraist.devideosapi.videos.repository.IVideosRepository;
 import com.lucasmoraist.devideosapi.videos.repository.VideosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class VideosService {
+public class VideosService implements IVideosRepository {
 
     @Autowired
     private VideosRepository videosRepository;
@@ -22,48 +23,58 @@ public class VideosService {
     @Autowired
     private CategoryService categoryService;
 
-    public List<Videos> listAll() {
+    @Override
+    public List<Videos> findAllVideos() {
         return this.videosRepository.findAll();
     }
 
-    public Videos listById(Long id) {
-        return this.findVideoById(id);
+    @Override
+    public Videos findVideoById(Long id) {
+        return this.videosRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFound("Video Not Found"));
     }
 
-    public Page<List<Videos>> listVideosByIdCategory(Long idCategory, Pageable pageable) {
-        Category id = this.categoryService.listCategoryById(idCategory);
-
-        return this.videosRepository.findVideoByCategory(id.getId(), pageable);
+    @Override
+    public Page<List<Videos>> findVideoByIdCategory(Long idCategory, Pageable pageable) {
+        Category category = this.categoryService.listCategoryById(idCategory);
+        if (category == null) throw new ResourceNotFound("Category Not Found");
+        return this.videosRepository.findVideoByCategory(category.getId(), pageable);
     }
 
-    public Page<List<Videos>> listVideosByTitle(String search, Pageable pageable) {
-        return this.videosRepository.findVideosByTitle(search, pageable);
+    @Override
+    public Page<List<Videos>> findVideosByTitle(String search, Pageable pageable) {
+        Page<List<Videos>> videos = this.videosRepository.findVideosByTitle(search, pageable);
+        if (videos.isEmpty()) throw new ResourceNotFound("Video Not Found");
+        return videos;
     }
 
-    public List<Videos> listVideosFree(){
+    @Override
+    public List<Videos> findVideosFree() {
         return this.videosRepository.findVideosFree();
     }
 
-    public Videos createVideo(CreateOrUpdateVideosDTO dto) {
-        Category category;
+    @Override
+    public Videos saveVideos(CreateOrUpdateVideosDTO dto) {
+
+        if (dto.title() == null || dto.description() == null || dto.url() == null) {
+            throw new ResourceNotFound("Invalid data");
+        }
+
+        Category category = this.getCategory(dto.idCategory());
+
         Videos newVideos = Videos.builder()
                 .title(dto.title())
                 .description(dto.description())
                 .url(dto.url())
+                .category(category)
                 .build();
-
-        if (dto.idCategory() == null) {
-            category = this.categoryService.listCategoryById(1L);
-        } else {
-            category = this.categoryService.listCategoryById(dto.idCategory());
-        }
-        newVideos.setCategory(category);
 
         this.videosRepository.save(newVideos);
 
         return newVideos;
     }
 
+    @Override
     public Videos updateVideo(Long id, CreateOrUpdateVideosDTO dto) {
         Videos video = this.findVideoById(id);
 
@@ -75,15 +86,15 @@ public class VideosService {
         return video;
     }
 
+    @Override
     public String deleteVideos(Long id) {
         Videos video = this.findVideoById(id);
         this.videosRepository.delete(video);
         return "Excluído com sucesso!";
     }
 
-    private Videos findVideoById(Long id) {
-        return this.videosRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFound("Video Not Found"));
+    private Category getCategory(Long idCategory) {
+        if (idCategory == null) return this.categoryService.listCategoryById(1L);
+        return this.categoryService.listCategoryById(idCategory);
     }
-
 }
