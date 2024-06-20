@@ -1,19 +1,20 @@
 package com.lucasmoraist.devideosapi.videos.repository;
 
 import com.lucasmoraist.devideosapi.videos.domain.Videos;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface VideosRepository extends JpaRepository<Videos, Long> {
 
     @Query(value = "SELECT * FROM t_videos WHERE category_id = :idCategory", nativeQuery = true)
-    Optional<List<Videos>> findVideoByCategory(Long idCategory);
+    Page<List<Videos>> findVideoByCategory(Long idCategory, Pageable pageable);
 
     @Query(value = "SELECT * FROM t_videos WHERE title LIKE %:search%", nativeQuery = true)
-    Optional<List<Videos>> findVideosByTitle(@PathVariable String search);
+    Page<List<Videos>> findVideosByTitle(@PathVariable String search, Pageable pageable);
 
 }
