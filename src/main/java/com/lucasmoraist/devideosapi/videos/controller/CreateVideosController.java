@@ -33,7 +33,7 @@ public class CreateVideosController {
     )
     @PostMapping
     public ResponseEntity<Videos> create(@RequestBody CreateOrUpdateVideosDTO dto) {
-        Videos videos = this.service.createVideo(dto);
+        Videos videos = this.service.saveVideos(dto);
         log.info("Creating video: {}", videos);
         return ResponseEntity.ok().body(videos);
     }
