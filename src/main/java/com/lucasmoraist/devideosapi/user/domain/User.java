@@ -20,8 +20,7 @@ public class User {
     private String name;
     @Email @Column(nullable = false, unique = true, length = 180)
     private String email;
-    @Column(nullable = false, length = 20)
-    @Min(6)
+    @Column(nullable = false)
     private String password;
 
 }

@@ -27,24 +27,19 @@ public class AuthService {
         User user = this.repository.findByEmail(dto.email())
                 .orElseThrow(() -> new EmailNotFound("Email incorreto"));
 
-        if (!passwordEncoder.matches(dto.password(), user.getPassword())) {
-            throw new PasswordException("Senha incorreta");
-        }
+        if (!passwordEncoder.matches(dto.password(), user.getPassword())) throw new PasswordException("Senha incorreta");
 
         return this.token(user);
     }
 
     public ResponseAuthDTO authRegister(RegisterRequestDTO dto) {
         Optional<User> optionalUser = this.repository.findByEmail(dto.email());
-
-        if (optionalUser.isPresent()) {
-            throw new DuplicateException("Este email já existe");
-        }
+        if (optionalUser.isPresent()) throw new DuplicateException("Este email já existe");
 
         User newUser = User.builder()
                 .name(dto.name())
                 .email(dto.email())
-                .password(passwordEncoder.encode(dto.password()))
+                .password(this.passwordEncoder.encode(dto.password()))
                 .build();
         this.repository.save(newUser);
 

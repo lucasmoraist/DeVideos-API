@@ -6,6 +6,7 @@ import com.lucasmoraist.devideosapi.user.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,9 @@ public class RegisterController {
             description = "Must return email and token to access"
     )
     @PostMapping("register")
-    public ResponseEntity<ResponseAuthDTO> register(@RequestBody RegisterRequestDTO dto) {
+    public ResponseEntity<ResponseAuthDTO> register(@Valid @RequestBody RegisterRequestDTO dto) {
         var response = this.service.authRegister(dto);
+        log.info("Registering");
         return ResponseEntity.ok().body(response);
     }
 }
