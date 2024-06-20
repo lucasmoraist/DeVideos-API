@@ -75,4 +75,9 @@ public class ListVideosController {
         return ResponseEntity.ok().body(this.service.listVideosByTitle(search, pageable));
     }
 
+    @GetMapping("/free")
+    public ResponseEntity<List<Videos>> listVideosFree(){
+        return ResponseEntity.ok().body(this.service.listVideosFree());
+    }
+
 }

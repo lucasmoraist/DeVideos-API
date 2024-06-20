@@ -17,4 +17,6 @@ public interface VideosRepository extends JpaRepository<Videos, Long> {
     @Query(value = "SELECT * FROM t_videos WHERE title LIKE %:search%", nativeQuery = true)
     Page<List<Videos>> findVideosByTitle(@PathVariable String search, Pageable pageable);
 
+    @Query(value = "SELECT * FROM t_videos ORDER BY RAND() LIMIT 5", nativeQuery = true)
+    List<Videos> findVideosFree();
 }

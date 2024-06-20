@@ -40,6 +40,10 @@ public class VideosService {
         return this.videosRepository.findVideosByTitle(search, pageable);
     }
 
+    public List<Videos> listVideosFree(){
+        return this.videosRepository.findVideosFree();
+    }
+
     public Videos createVideo(CreateOrUpdateVideosDTO dto) {
         Category category;
         Videos newVideos = Videos.builder()
