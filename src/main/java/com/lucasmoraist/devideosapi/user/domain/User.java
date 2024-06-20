@@ -2,7 +2,6 @@ package com.lucasmoraist.devideosapi.user.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import lombok.*;
 
 @Data

@@ -4,7 +4,6 @@ import com.lucasmoraist.devideosapi.category.domain.Category;
 import com.lucasmoraist.devideosapi.category.dto.CreateOrUpdateCategoriesDTO;
 import com.lucasmoraist.devideosapi.category.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
