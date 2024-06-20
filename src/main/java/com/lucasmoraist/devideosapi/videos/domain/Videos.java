@@ -29,4 +29,14 @@ public class Videos {
     @JsonBackReference
     private Category category;
 
+    @Override
+    public String toString() {
+        return "Videos{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", url='" + url + '\'' +
+                ", category=" + category +
+                '}';
+    }
 }

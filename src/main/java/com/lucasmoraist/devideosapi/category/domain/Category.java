@@ -29,4 +29,14 @@ public class Category {
     @OneToMany(mappedBy = "category")
     @JsonManagedReference
     private List<Videos> videos;
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", color=" + color +
+                ", videos=" + videos +
+                '}';
+    }
 }

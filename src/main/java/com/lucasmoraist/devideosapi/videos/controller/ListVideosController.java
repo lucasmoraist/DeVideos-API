@@ -8,6 +8,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,9 +70,14 @@ public class ListVideosController {
             description = "Return specific Video"
     )
     @GetMapping
-    public ResponseEntity<List<Videos>> listVideosByTitle(@RequestParam(name = "search") String search) {
+    public ResponseEntity<Page<List<Videos>>> listVideosByTitle(@RequestParam(name = "search") String search, @PageableDefault(size = 5) Pageable pageable) {
         log.info("Listing video by title: {}", search);
-        return ResponseEntity.ok().body(this.service.listVideosByTitle(search));
+        return ResponseEntity.ok().body(this.service.listVideosByTitle(search, pageable));
+    }
+
+    @GetMapping("/free")
+    public ResponseEntity<List<Videos>> listVideosFree(){
+        return ResponseEntity.ok().body(this.service.listVideosFree());
     }
 
 }

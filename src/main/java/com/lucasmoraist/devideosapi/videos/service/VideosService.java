@@ -7,6 +7,8 @@ import com.lucasmoraist.devideosapi.videos.domain.Videos;
 import com.lucasmoraist.devideosapi.videos.dto.CreateOrUpdateVideosDTO;
 import com.lucasmoraist.devideosapi.videos.repository.VideosRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,16 +30,18 @@ public class VideosService {
         return this.findVideoById(id);
     }
 
-    public List<Videos> listVideosByIdCategory(Long idCategory) {
+    public Page<List<Videos>> listVideosByIdCategory(Long idCategory, Pageable pageable) {
         Category id = this.categoryService.listCategoryById(idCategory);
 
-        return this.videosRepository.findVideoByCategory(id.getId())
-                .orElseThrow(() -> new ResourceNotFound("Videos Not Found"));
+        return this.videosRepository.findVideoByCategory(id.getId(), pageable);
     }
 
-    public List<Videos> listVideosByTitle(String search) {
-        return this.videosRepository.findVideosByTitle(search)
-                .orElseThrow(() -> new ResourceNotFound("Video Not Found"));
+    public Page<List<Videos>> listVideosByTitle(String search, Pageable pageable) {
+        return this.videosRepository.findVideosByTitle(search, pageable);
+    }
+
+    public List<Videos> listVideosFree(){
+        return this.videosRepository.findVideosFree();
     }
 
     public Videos createVideo(CreateOrUpdateVideosDTO dto) {

@@ -10,6 +10,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,8 +59,8 @@ public class ListCategoryController {
             description = "Should return video in category"
     )
     @GetMapping("/{idCategory}/videos")
-    public ResponseEntity<List<Videos>> findVideosByCategory(@PathVariable Long idCategory) {
-        List<Videos> videos = this.videosService.listVideosByIdCategory(idCategory);
+    public ResponseEntity<Page<List<Videos>>> findVideosByCategory(@PathVariable Long idCategory, @PageableDefault(size = 5) Pageable pageable) {
+        Page<List<Videos>> videos = this.videosService.listVideosByIdCategory(idCategory, pageable);
         log.info("Listing videos by category: {}", videos);
         return ResponseEntity.ok().body(videos);
     }
