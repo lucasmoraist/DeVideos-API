@@ -36,7 +36,7 @@ public class ListVideosController {
     @GetMapping("list")
     public ResponseEntity<List<Videos>> listAll() {
         log.info("Listing all videos");
-        return ResponseEntity.ok().body(this.service.listAll());
+        return ResponseEntity.ok().body(this.service.findAllVideos());
     }
 
     @Operation(
@@ -54,7 +54,7 @@ public class ListVideosController {
     @GetMapping("{id}")
     public ResponseEntity<Videos> listById(@PathVariable Long id) {
         log.info("Listing category with id: {}", id);
-        return ResponseEntity.ok().body(this.service.listById(id));
+        return ResponseEntity.ok().body(this.service.findVideoById(id));
     }
 
     @Operation(
@@ -72,12 +72,12 @@ public class ListVideosController {
     @GetMapping
     public ResponseEntity<Page<List<Videos>>> listVideosByTitle(@RequestParam(name = "search") String search, @PageableDefault(size = 5) Pageable pageable) {
         log.info("Listing video by title: {}", search);
-        return ResponseEntity.ok().body(this.service.listVideosByTitle(search, pageable));
+        return ResponseEntity.ok().body(this.service.findVideosByTitle(search, pageable));
     }
 
     @GetMapping("/free")
     public ResponseEntity<List<Videos>> listVideosFree(){
-        return ResponseEntity.ok().body(this.service.listVideosFree());
+        return ResponseEntity.ok().body(this.service.findVideosFree());
     }
 
 }

@@ -43,7 +43,7 @@ public class ListCategoryController {
     @GetMapping
     public ResponseEntity<List<Category>> listAll() {
         log.info("Listing all categories");
-        return ResponseEntity.ok().body(this.service.listAll());
+        return ResponseEntity.ok().body(this.service.listAllCategories());
     }
 
     @Operation(
@@ -60,7 +60,7 @@ public class ListCategoryController {
     )
     @GetMapping("/{idCategory}/videos")
     public ResponseEntity<Page<List<Videos>>> findVideosByCategory(@PathVariable Long idCategory, @PageableDefault(size = 5) Pageable pageable) {
-        Page<List<Videos>> videos = this.videosService.listVideosByIdCategory(idCategory, pageable);
+        Page<List<Videos>> videos = this.videosService.findVideoByIdCategory(idCategory, pageable);
         log.info("Listing videos by category: {}", videos);
         return ResponseEntity.ok().body(videos);
     }
