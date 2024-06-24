@@ -4,32 +4,44 @@
 ![Apache Maven](https://img.shields.io/badge/Apache%20Maven-C71A36?style=for-the-badge&logo=Apache%20Maven&logoColor=white)
 
 ## Descrição
-A plataforma deve permitir ao usuário montar playlists com links para seus vídeos preferidos, separados por categorias, dessa forma o usuário pode acessar seu vídeos favoritos de forma mais fácil e caso ele ainda sinta dificuldade a plataforma permite que o usuário pesquise por vídeos dentro das suas playlists para que ele não precise ficar olhando um por um. Esse projeto foi desenvolvido para facilitar o acesso aos vídeos favoritos do usuário.
+A plataforma permite que você crie playlists com links para seus vídeos preferidos, organizando-os por categorias. Assim, você pode acessar seus vídeos favoritos de forma mais prática. Se tiver dificuldade para encontrar um vídeo específico, a plataforma oferece uma função de busca dentro das playlists, evitando que você tenha que procurar manualmente vídeo por vídeo. Este projeto foi desenvolvido para simplificar e agilizar o acesso aos seus vídeos favoritos.
 
 ## Instrução de instalação
 ### Pré requisitos
 - IDE de preferência (Vscode, Eclipse, Intellij)
 - Java 17 ou superior
 - Maven 3.2.5 ou superior
+- 
 ### Etapas
 1. Configure seu banco de dados no arquivo `application.properties`
-2. Abra o bash do seu computador e rode os seguintes comandos:
+- Caso não tenha banco de dados você pode usar a imagem do mysql disponibilizada no arquivo `docker-compose.yml`
+- Entre na sua pasta através do bash e rode o seguinte comando
+```bash
+docker-compose up -d
+```
+- E então configure o usuário, senha e nome do banco de dados no `application.properties`
+
+2. Abra o bash dentro da sua pasta e rode os seguintes comandos:
 ```bash
 mvn clean
 ```
 ```bash
-mvn package
+mvn verify
 ```
 ```bash
-java -jar target/devflix-api-0.0.1-SNAPSHOT.jar
+java -jar target/devideos-api-1.0-SNAPSHOT.jar
+```
+```bash
+java -jar target/devideos-api-1.0-SNAPSHOT.jar
 ```
 
 ## Instrução de uso
 - Com o programa rodando você pode fazer os testes das requisições
 - Você pode usar ferramentas como o Postman ou Insomnia para testar as requisições
 1. Abra sua ferramenta para teste de requisições
-2. Importe o arquivo json que contém os testes de todas as requisições, ele irá estar em `./src/main/resources/utils/insomnia`, o json pode ser importado em ambas ferramentas
-
+2. Importe o arquivo json que contém os testes de todas as requisições, nome dele é `Testes Http`
+3. Com o projeto em execução, você também pode pesquisar no seu navegador por `http://localhost:8080/swagger-ui.html`. Lá estará uma documentação junto com todas as requisições que podem ser testadas e suas especificações.
+   
 ## Entidades
 ### Videos
 | Nome | Tipo | Descrição |
