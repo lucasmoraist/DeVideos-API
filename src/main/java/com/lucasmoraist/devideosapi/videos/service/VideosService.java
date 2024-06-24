@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class VideosService implements IVideosRepository {
@@ -56,18 +57,7 @@ public class VideosService implements IVideosRepository {
     @Override
     public Videos saveVideos(CreateOrUpdateVideosDTO dto) {
 
-        if (dto.title() == null || dto.description() == null || dto.url() == null) {
-            throw new ResourceNotFound("Invalid data");
-        }
-
-        Category category = this.getCategory(dto.idCategory());
-
-        Videos newVideos = Videos.builder()
-                .title(dto.title())
-                .description(dto.description())
-                .url(dto.url())
-                .category(category)
-                .build();
+        Videos newVideos = this.instanceVideos(dto);
 
         this.videosRepository.save(newVideos);
 
@@ -94,7 +84,20 @@ public class VideosService implements IVideosRepository {
     }
 
     private Category getCategory(Long idCategory) {
-        if (idCategory == null) return this.categoryService.listCategoryById(1L);
-        return this.categoryService.listCategoryById(idCategory);
+        return this.categoryService.listCategoryById(
+                Objects.requireNonNullElse(idCategory, 1L));
+    }
+
+    private Videos instanceVideos(CreateOrUpdateVideosDTO dto) {
+        if (dto.title() == null || dto.title().isEmpty() || dto.description() == null || dto.description().isEmpty() || dto.url() == null || dto.url().isEmpty()) {
+            throw new IllegalArgumentException("Invalid data");
+        }
+
+        return Videos.builder()
+                .title(dto.title())
+                .description(dto.description())
+                .url(dto.url())
+                .category(this.getCategory(dto.idCategory()))
+                .build();
     }
 }
