@@ -4,6 +4,7 @@ import com.lucasmoraist.devideosapi.category.domain.Category;
 import com.lucasmoraist.devideosapi.category.dto.CreateOrUpdateCategoriesDTO;
 import com.lucasmoraist.devideosapi.category.repository.CategoryRepository;
 import com.lucasmoraist.devideosapi.category.repository.ICategoryRepository;
+import com.lucasmoraist.devideosapi.exception.CategoryDefaultException;
 import com.lucasmoraist.devideosapi.exception.ResourceNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,7 @@ public class CategoryService implements ICategoryRepository {
 
     @Override
     public Category createCategory(CreateOrUpdateCategoriesDTO dto) {
-        Category newCategory = Category.builder()
-                .title(dto.title())
-                .color(dto.color())
-                .build();
+        Category newCategory = this.instanceCategory(dto);
         this.categoryRepository.save(newCategory);
         return newCategory;
     }
@@ -51,11 +49,22 @@ public class CategoryService implements ICategoryRepository {
     @Override
     public String deleteCategory(Long id) {
         if (id == 1L) {
-            return "Não é possível excluir essa categoria!";
+            throw new CategoryDefaultException("Não é possível excluir essa categoria!");
         } else {
             Category category = this.listCategoryById(id);
             this.categoryRepository.delete(category);
             return "Excluído com sucesso!";
         }
+    }
+
+    private Category instanceCategory(CreateOrUpdateCategoriesDTO dto){
+        if(dto.title() == null || dto.title().isEmpty() || dto.color() == null){
+            throw new IllegalArgumentException("Invalid Values");
+        }
+
+        return Category.builder()
+                .title(dto.title())
+                .color(dto.color())
+                .build();
     }
 }
