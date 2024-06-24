@@ -9,6 +9,7 @@ import com.lucasmoraist.devideosapi.user.dto.LoginRequestDTO;
 import com.lucasmoraist.devideosapi.user.dto.RegisterRequestDTO;
 import com.lucasmoraist.devideosapi.user.dto.ResponseAuthDTO;
 import com.lucasmoraist.devideosapi.user.repository.UserRepository;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -36,11 +37,8 @@ public class AuthService {
         Optional<User> optionalUser = this.repository.findByEmail(dto.email());
         if (optionalUser.isPresent()) throw new DuplicateException("Este email já existe");
 
-        User newUser = User.builder()
-                .name(dto.name())
-                .email(dto.email())
-                .password(this.passwordEncoder.encode(dto.password()))
-                .build();
+        User newUser = this.instanceUser(dto);
+
         this.repository.save(newUser);
 
         return this.token(newUser);
@@ -49,6 +47,18 @@ public class AuthService {
     private ResponseAuthDTO token(User user) {
         String token = this.tokenService.generateToken(user);
         return new ResponseAuthDTO(user.getEmail(), token);
+    }
+
+    private User instanceUser(RegisterRequestDTO dto){
+        if(dto.name() == null || dto.name().isEmpty() || dto.email() == null || dto.email().isEmpty() || dto.password() == null || dto.password().isEmpty()){
+            throw new IllegalArgumentException("Invalid data");
+        }
+
+        return User.builder()
+                .name(dto.name())
+                .email(dto.email())
+                .password(this.passwordEncoder.encode(dto.password()))
+                .build();
     }
 
 }
