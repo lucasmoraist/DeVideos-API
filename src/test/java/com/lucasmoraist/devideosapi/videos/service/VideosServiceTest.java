@@ -137,15 +137,15 @@ class VideosServiceTest {
         assertThrows(ResourceNotFound.class, () -> videosService.findVideosByTitle("non-existing-title", Pageable.unpaged()));
     }
 
-//    @Test
-//    @DisplayName("Should throw IllegalArgumentException when saving a video with invalid data")
-//    void case09() {
-//        CreateOrUpdateCategoriesDTO dtoCategory = new CreateOrUpdateCategoriesDTO("teste", ColorsEnum.CINZA);
-//        categoryService.createCategory(dtoCategory);
-//        CreateOrUpdateVideosDTO dto = new CreateOrUpdateVideosDTO(null, null, null, 1L);
-//
-//        assertThrows(IllegalArgumentException.class, () -> videosService.saveVideos(dto));
-//    }
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when saving a video with invalid data")
+    void case09() {
+        CreateOrUpdateCategoriesDTO dtoCategory = new CreateOrUpdateCategoriesDTO("teste", ColorsEnum.CINZA);
+        categoryService.createCategory(dtoCategory);
+        CreateOrUpdateVideosDTO dto = new CreateOrUpdateVideosDTO(null, null, null, 1L);
+
+        assertThrows(IllegalArgumentException.class, () -> videosService.saveVideos(dto));
+    }
 
     @Test
     @DisplayName("Should throw ResourceNotFound when updating a non-existing video")
