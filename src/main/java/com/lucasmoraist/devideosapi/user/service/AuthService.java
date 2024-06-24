@@ -9,7 +9,6 @@ import com.lucasmoraist.devideosapi.user.dto.LoginRequestDTO;
 import com.lucasmoraist.devideosapi.user.dto.RegisterRequestDTO;
 import com.lucasmoraist.devideosapi.user.dto.ResponseAuthDTO;
 import com.lucasmoraist.devideosapi.user.repository.UserRepository;
-import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
