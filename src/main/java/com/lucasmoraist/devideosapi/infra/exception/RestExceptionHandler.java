@@ -1,6 +1,7 @@
 package com.lucasmoraist.devideosapi.infra.exception;
 
 import com.lucasmoraist.devideosapi.exception.*;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EmailNotFound.class)
     protected ResponseEntity<ExceptionDTO> emailNotFound(EmailNotFound e){
         ExceptionDTO dto = new ExceptionDTO(e.getMessage(), HttpStatus.NOT_FOUND);
+        return ResponseEntity.badRequest().body(dto);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<ExceptionDTO> constraintViolation(ConstraintViolationException e){
+        ExceptionDTO dto = new ExceptionDTO(e.getMessage(), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(dto);
+    }
+
+    @ExceptionHandler(CategoryDefaultException.class)
+    protected ResponseEntity<ExceptionDTO> categoryDefaultException(CategoryDefaultException e){
+        ExceptionDTO dto = new ExceptionDTO(e.getMessage(), HttpStatus.BAD_REQUEST);
         return ResponseEntity.badRequest().body(dto);
     }
 }
