@@ -11,7 +11,7 @@ A plataforma permite que você crie playlists com links para seus vídeos prefer
 - IDE de preferência (Vscode, Eclipse, Intellij)
 - Java 17 ou superior
 - Maven 3.2.5 ou superior
-- 
+  
 ### Etapas
 1. Configure seu banco de dados no arquivo `application.properties`
 - Caso não tenha banco de dados você pode usar a imagem do mysql disponibilizada no arquivo `docker-compose.yml`
